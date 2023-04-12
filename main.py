@@ -16,10 +16,6 @@ import torch
 
 gc.collect()
 
-assert sys.version_info >= (3, 6),\
-    "This script requires Python >= 3.6"  # TODO 3.7?
-assert tuple(int(ver_num) for ver_num in torch.__version__.split('.')) >= (0, 4, 0),\
-    "This script requires PyTorch >= 0.4.0"  # TODO 0.4.1?
 
 
 def str_to_gender(s):
@@ -47,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--mode', choices=['train', 'test'], default='train')
 
     # train params
-    parser.add_argument('--epochs', '-e', default=1, type=int)
+    parser.add_argument('--epochs', '-e', default=10, type=int)
     parser.add_argument(
         '--models-saving',
         '--ms',
@@ -89,8 +85,11 @@ if __name__ == '__main__':
     consts.NUM_Z_CHANNELS = args.z_channels
     net = model.Net()
 
+   
+
     if not args.cpu and torch.cuda.is_available():
         net.cuda()
+        net.to(device=net.device)
 
     if args.mode == 'train':
 

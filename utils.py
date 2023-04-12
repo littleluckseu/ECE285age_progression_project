@@ -4,7 +4,7 @@ from shutil import copyfile
 from collections import namedtuple, defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.metrics.regression import mean_squared_error as mse
+from sklearn.metrics import mean_squared_error as mse
 
 import torch
 import torchvision.transforms as transforms

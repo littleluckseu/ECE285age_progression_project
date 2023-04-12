@@ -228,7 +228,7 @@ class Net(object):
         self.di_optimizer = Adam(self.Dimg.parameters())
 
         self.device = None
-        self.cpu()  # initial, can later move to cuda
+        self.cuda()  # initial, can later move to cuda
 
     def __call__(self, *args, **kwargs):
         self.test_single(*args, **kwargs)
@@ -358,8 +358,8 @@ class Net(object):
         valid_size = valid_size or batch_size
         valid_dataset, train_dataset = torch.utils.data.random_split(dataset, (valid_size, len(dataset) - valid_size))
 
-        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-        valid_loader = DataLoader(dataset=valid_dataset, batch_size=batch_size, shuffle=False)
+        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True,drop_last=True)
+        valid_loader = DataLoader(dataset=valid_dataset, batch_size=batch_size, shuffle=False,drop_last=True)
         idx_to_class = {v: k for k, v in dataset.class_to_idx.items()}
 
         input_output_loss = l1_loss
@@ -491,8 +491,8 @@ class Net(object):
                         joined = merge_images(images, generated)  # torch.cat((generated, images), 0)
 
                         file_name = os.path.join(where_to_save_epoch, 'validation.png')
-                        save_image_normalized(tensor=joined, filename=file_name, nrow=nrow)
-
+                        save_image(joined, file_name,nrow=nrow, normalize=True, range=(-1, 1), padding=4)
+                        
                         losses['valid'].append(loss.item())
                         break
 
